@@ -76,9 +76,9 @@ const controller = {
                 }
             })
             response(res,200,dto(goods),"商品删除成功")
-        }else{
-            response(res,200,null,"商品不存在")
+            return
         }
+        response(res,422,null,"商品删除失败,商品不存在")
     },
 }
 module.exports = controller

@@ -66,9 +66,9 @@ const controller = {
                 }
             })
             response(res,200,dto(tags),"分类删除成功")
-        }else{
-            response(res,200,null,"分类不存在")
+            return
         }
+        response(res,422,null,"分类删除失败,找不到分类")
     }
 }
 

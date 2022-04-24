@@ -3,7 +3,7 @@ const router = express.Router()
 const authMiddleWare = require("../middleware/Authrization")
 const Relationship = require("../controller/relationship-controller")
 
-router.post("/",authMiddleWare.root,Relationship.Regist)
+router.post("/tags",authMiddleWare.root,Relationship.TagsRegist)
 
 router.get("/",Relationship.GetAll)
 

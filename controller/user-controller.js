@@ -51,7 +51,7 @@ const controller = {
     async GetUser(req,res){
         let userid = req.body.userid
         let user = await Users.findByPk(userid)
-        response(res,200,dto(user),"认证成功")
+        response(res,200,{user:dto(user)},"认证成功")
     },
     async GetAll(req,res){
         let users = await Users.findAll({
@@ -129,6 +129,7 @@ const controller = {
             response(res,200,dto(user),"注销成功")
             return
         }
+        response(res,422,null,"注销失败,找不到用户")
     }
 }
 

@@ -6,10 +6,14 @@ const RelationShips = db.defineModel('relationships', {
         type: Sequelize.BIGINT(20),
         allowNull: false,
     },
-    tagsid: {
+    relationid: {
         type: Sequelize.BIGINT(20),
         allowNull: false,
     },
+    status:{
+        type: Sequelize.BIGINT(20),
+        allowNull: false,
+    }
 });
 
 (async ()=> {

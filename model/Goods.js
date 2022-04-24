@@ -33,9 +33,9 @@ const Goods = db.defineModel('goods', {
     },
 });
 
-(async ()=> {
-    Goods.sync({force:true})
-})()
+// (async ()=> {
+//     Goods.sync({force:true})
+// })()
 
 
 module.exports = Goods
