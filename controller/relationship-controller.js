@@ -15,10 +15,14 @@ const response = require("../response/response")
 
 const controller = {
     async TagsRegist(req,res){
-        let body = req.body
+        let { goodsid,tagsid } = req.body
+        if (!goodsid||!tagsid){
+            response(res,422,null,"关系注册失败")
+            return
+        }
         let relationships = {
-            goodsid:body.goodsid,
-            relationid:body.tagsid,
+            goodsid:goodsid,
+            relationid:tagsid,
             status:0
         }
         let ret = await RelationShips.findAll({
@@ -28,7 +32,7 @@ const controller = {
             }
         })
         if (ret.length>0){
-            response(res,200,null,"关系已被占用")
+            response(res,422,null,"关系已被占用")
             return
         }
         let goods = await Goods.findByPk(relationships.goodsid)

@@ -45,7 +45,7 @@ const handle = {
             return null
         })
         .catch(err => {
-            // console.log("Fail")
+            // console.error(err)
             return err.name
         })
     },

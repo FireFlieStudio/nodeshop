@@ -13,7 +13,7 @@ const RelationShips = db.defineModel('comments', {
         type: Sequelize.BIGINT(20),
         allowNull: false,
     },
-    description: {
+    desc: {
         type: Sequelize.STRING(255),
         allowNull: true,
         defaultValue:"用户没有评价,系统默认好评。"

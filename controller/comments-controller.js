@@ -4,11 +4,11 @@ const response = require("../response/response")
 
 const controller = {
     async Post(req,res){
-        let body = req.body
+        let { userid,desc,star } = req.body
         let comments = {
-            userid:body.userid,
-            description:body.description,
-            star:body.star
+            userid:userid,
+            desc:desc,
+            star:star
         }
         let err = await db.Insert(Comments,comments)
         if (err!=null){
@@ -22,8 +22,7 @@ const controller = {
         response(res,200,{comments:comments},"评论发布成功")
     },
     async Delete(req,res){
-        let body = req.body
-        let commentsid = body.commentsid
+        let { commentsid } = req.body
         let comments = await Comments.findByPk(commentsid)
         if (comments){
             const destroy = await Comments.destroy({

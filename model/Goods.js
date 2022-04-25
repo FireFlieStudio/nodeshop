@@ -26,16 +26,16 @@ const Goods = db.defineModel('goods', {
         allowNull: true,
         defaultValue:""
     },
-    description: {
+    desc: {
         type: Sequelize.STRING(255),
         allowNull: true,
         defaultValue:""
     },
 });
 
-// (async ()=> {
-//     Goods.sync({force:true})
-// })()
+(async ()=> {
+    Goods.sync({force:true})
+})()
 
 
 module.exports = Goods

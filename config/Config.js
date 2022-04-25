@@ -2,7 +2,7 @@ const Config = {
     sqlConfig : {
         host: '119.28.9.24',
         user: 'node',
-        password: 'htEA2h3FjyZByPD3',
+        password: 'zeRnYx7khPLnrCJA',
         database: 'node',
         port: 3306,
         debug: false

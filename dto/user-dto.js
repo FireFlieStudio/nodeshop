@@ -4,6 +4,6 @@ module.exports = (user) =>{
             username:user.username,
             emial:user.emial,
             image:user.image,
-            description:user.description
+            desc:user.desc
         }
     }

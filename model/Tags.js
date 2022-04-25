@@ -14,7 +14,7 @@ const Tags = db.defineModel('tags', {
         unique: true,
         allowNull: false
     },
-    description: {
+    desc: {
         type: Sequelize.STRING(255),
         allowNull: false,
     },

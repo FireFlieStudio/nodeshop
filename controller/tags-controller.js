@@ -6,10 +6,23 @@ const response = require("../response/response")
 
 const controller = {
     async Regist(req,res){
-        let body = req.body
+        let { tagsname,desc } = req.body
+        if (!tagsname||!desc){
+            response(res,422,null,"分类创建失败")
+            return
+        }
         let tags = {
-            tagsname:body.tagsname,
-            description:body.description
+            tagsname:tagsname,
+            desc:desc
+        }
+        let tag = await Tags.findAll({
+            where:{
+                tagsname:tagsname
+            }
+        })
+        if (tag.length>0){
+            response(res,200,null,"分类创建成功")
+            return
         }
         let err = await db.Insert(Tags,tags)
         if (err!=null){
@@ -33,21 +46,28 @@ const controller = {
     async GetAll(req,res){
         let tags = await Tags.findAll()
         if (tags){
-            response(res,200,{tags:tags},"")
+            tagscontent = []
+            for (let i=0;i<tags.length;i++){
+                tagscontent.push(dto(tags[i]))
+            }
+            response(res,200,{tags:tagscontent},"")
         }else{
             response(res,200,null,"暂无分类")
         }
     },
     async Update(req,res){
-        let body = req.body
         let tagsid = body.tagsid
+        if (!tagsid){
+            response(res,422,null,"分类创建失败")
+            return
+        }
         let tags = await Tags.findByPk(tagsid)
         if (tags){
             if (body.tagsname){
                 tags.tagsname = body.tagsname
             }
-            if (body.description){
-                tags.description = body.description
+            if (body.desc){
+                tags.desc = body.desc
             }
             tags.save()
             response(res,200,dto(tags),"")
@@ -56,8 +76,11 @@ const controller = {
         }
     },
     async Delete(req,res){
-        let body = req.body
         let tagsid = body.tagsid
+        if (!tagsid){
+            response(res,422,null,"分类创建失败")
+            return
+        }
         let tags = await Tags.findByPk(tagsid)
         if (tags){
             const destroy = await Tags.destroy({

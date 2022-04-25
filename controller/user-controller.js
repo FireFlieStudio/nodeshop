@@ -9,16 +9,21 @@ const response = require("../response/response")
 
 const controller = {
     async Regist(req,res){
-        let telephone = body.telephone||0
-        let body = req.body
+        let telephone = req.body.telephone||0
+        let { username,password,emial } = req.body
+        if (!username||!password||!emial){
+            if (!username||!emial||!password){
+                response(res,244,null,"注册失败")
+                return
+            }
+        }
         let user = {
-            username:body.username,
-            password:bcrypt.hashSync(body.password,10),
-            emial:body.emial,
+            username:username,
+            password:bcrypt.hashSync(password,10),
+            emial:emial,
             telephone:telephone
         }
         let err = await db.Insert(Users,user)
-        console.log(err)
         if (err!=null){
             if (err =="SequelizeUniqueConstraintError"||err == "SequelizeValidationError"){
                 response(res,422,null,"手机号已被占用")
@@ -28,9 +33,11 @@ const controller = {
         response(res,200,{user:dto(user)},"注册成功")
     },
     async Login(req,res){
-        let body = req.body
-        let emial = body.emial
-        let password = body.password
+        let { emial,password } = req.body
+        if (!emial||!password){
+            response(res,422,null,"登陆失败")
+            return
+        }
         let user = await Users.findOne({
             where:{
                 emial:emial
@@ -49,13 +56,13 @@ const controller = {
         response(res,401,null,"用户不存在")
     },
     async GetUser(req,res){
-        let userid = req.body.userid
+        let { userid } = req.body
         let user = await Users.findByPk(userid)
         response(res,200,{user:dto(user)},"认证成功")
     },
     async GetAll(req,res){
         let users = await Users.findAll({
-            attributes:["userid","username","telephone","emial","image","description","status"]
+            attributes:["userid","username","telephone","emial","image","desc","status"]
         })
         if (users){
             response(res,200,users,"")
@@ -64,52 +71,50 @@ const controller = {
         response(res,200,null,"")
     },
     async Update(req,res){
-        let body = req.body
-        let userid = req.body.userid
+        let { userid,username,password,telephone,emial,image,desc } = req.body
         let user = await Users.findByPk(userid)
-        if (body.username){
-            user.username = body.username
+        if (username){
+            user.username = username
         }
-        if (body.password){
-            user.password = bcrypt.hashSync(body.password,10)
+        if (password){
+            user.password = bcrypt.hashSync(password,10)
         }
-        if (body.telephone){
-            user.telephone = body.telephone
+        if (telephone){
+            user.telephone = telephone
         }
-        if (body.emial){
-            user.emial = body.emial
+        if (emial){
+            user.emial = emial
         }
-        if (body.image){
-            user.image = body.image
+        if (image){
+            user.image = image
         }
-        if (body.description){
-            user.description = body.description
+        if (desc){
+            user.desc = desc
         }
         user.save()
         response(res,200,dto(user),"修改成功")
     },
     async UpdateUser(req,res){
-        let body = req.body
-        let userid = req.body.usersid
-        let user = await Users.findByPk(userid)
+        let { usersid,username,password,telephone,emial,image,desc } = req.body
+        let user = await Users.findByPk(usersid)
         if (user){
-            if (body.username){
-                user.username = body.username
+            if (username){
+                user.username = username
             }
-            if (body.password){
-                user.password = bcrypt.hashSync(body.password,10)
+            if (password){
+                user.password = bcrypt.hashSync(password,10)
             }
-            if (body.telephone){
-                user.telephone = body.telephone
+            if (telephone){
+                user.telephone = telephone
             }
-            if (body.emial){
-                user.emial = body.emial
+            if (emial){
+                user.emial = emial
             }
-            if (body.image){
-                user.image = body.image
+            if (image){
+                user.image = image
             }
-            if (body.description){
-                user.description = body.description
+            if (desc){
+                user.desc = desc
             }
             user.save()
             response(res,200,dto(user),"修改成功")
@@ -118,7 +123,11 @@ const controller = {
         }
     },
     async Delete(req,res){
-        let userid = req.body.userid
+        let { userid } = req.body
+        if (!userid){
+            response(res,422,null,"用户删除失败")
+            return
+        }
         let user = await Users.findByPk(userid)
         if (user){
             const destroy = await Users.destroy({

@@ -32,7 +32,7 @@ const Users = db.defineModel('users', {
         allowNull: true,
         // defaultValue:""
     },
-    description: {
+    desc: {
         type: Sequelize.STRING(255),
         allowNull: true,
         defaultValue:"这个人很懒,什么都没有写awa..."
