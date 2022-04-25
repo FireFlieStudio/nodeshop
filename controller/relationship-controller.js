@@ -90,8 +90,11 @@ const controller = {
         response(res,200,null,"关系创建失败,找不到商品")
     },
     async GetAll(req,res){
-        let body = req.body
-        let goodsid = body.goodsid
+        let { goodsid } = req.body
+        if (!goodsid){
+            response(res,422,null,"关系获取失败")
+            return
+        }
         let tags = await RelationShips.findAll({
             where:{
                 goodsid:goodsid
@@ -99,28 +102,32 @@ const controller = {
         })
         let content = {}
         let goods = await Goods.findByPk(goodsid)
-        if (goods){
-            if (tags.length>0){    
-                content.goods = Goodsdto(goods)
-                tagscontent = []
-                for (let i=0;i<tags.length;i++){
-                    let tag = await Tags.findByPk(tags[i].relationid)
-                    if (tag){
-                        tagscontent.push(Tagsdto(tag))
-                    }
-                }
-                content.tags = tagscontent
-                response(res,200,content,"关系查询成功")
-                return
-            }
+        if (!goods){
             response(res,422,null,"找不到关系")
             return
         }
-        response(res,422,null,"找不到关系")
+        if (!(tags.length>0)){
+            response(res,422,null,"找不到关系")
+            return
+        }
+        content.goods = Goodsdto(goods)
+        tagscontent = []
+        for (let i=0;i<tags.length;i++){
+            let tag = await Tags.findByPk(tags[i].relationid)
+            if (tag){
+                tagscontent.push(Tagsdto(tag))
+            }
+        }
+        content.tags = tagscontent
+        response(res,200,content,"关系查询成功")
+        return
     },
     async Delete(req,res){
-        let body = req.body
-        let goodsid = body.goodsid
+        let { goodsid } = req.body
+        if (!goodsid){
+            response(res,422,null,"关系删除失败")
+            return
+        }
         let goods = await Goods.findByPk(goodsid)
         if (goods){
             let destroy = await RelationShips.destroy({
