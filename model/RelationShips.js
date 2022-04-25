@@ -16,8 +16,6 @@ const RelationShips = db.defineModel('relationships', {
     }
 });
 
-(async ()=> {
-    RelationShips.sync({force:true})
-})()
+
 
 module.exports = RelationShips

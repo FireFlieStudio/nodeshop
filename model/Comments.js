@@ -1,7 +1,7 @@
 const { Sequelize } = require('sequelize');
 const db = require('../common/database')
 
-const RelationShips = db.defineModel('comments', {
+const Comments = db.defineModel('comments', {
     commentsid: {
         type: Sequelize.BIGINT(20),
         primaryKey: true,
@@ -25,8 +25,5 @@ const RelationShips = db.defineModel('comments', {
     },
 });
 
-(async ()=> {
-    RelationShips.sync({force:true})
-})()
 
-module.exports = RelationShips
+module.exports = Comments

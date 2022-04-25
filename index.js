@@ -2,6 +2,9 @@ const express = require("express")
 const app = express()
 const response = require("../response/response")
 
+const push = require("./model/PushToDB")
+push()
+
 const userRouter = require("./router/user-router")
 const goodsRouter = require("./router/goods-router")
 const tagsRouter = require("./router/tags-router")

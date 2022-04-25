@@ -20,8 +20,5 @@ const Tags = db.defineModel('tags', {
     },
 });
 
-(async ()=> {
-    Tags.sync({force:true})
-})()
 
 module.exports = Tags

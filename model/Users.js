@@ -45,8 +45,5 @@ const Users = db.defineModel('users', {
     }
 });
 
-// (async ()=> {
-//     Users.sync()//{force:true})
-// })()
 
 module.exports = Users
