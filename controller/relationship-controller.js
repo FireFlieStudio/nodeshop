@@ -1,11 +1,11 @@
 const Tags = require("../model/Tags")
-const Comments = require("../model/Comments")
 const Goods = require("../model/Goods.js")
 const RelationShips = require("../model/RelationShips")
 const Tagsdto = require("../dto/tags-dto")
 const Goodsdto = require("../dto/goods-dto")
 const db = require("../common/database")
 const response = require("../response/response")
+const Comments = require("../model/Comments")
 
 /*
     status:
@@ -54,31 +54,29 @@ const controller = {
         }
         response(res,200,null,"关系创建失败,找不到商品")
     },
-    async CommentsRegist(req,res){
-        //未完工
-    },
     async GetAll(req,res){
         let { goodsID } = req.body
         if (!goodsID){
             response(res,422,null,"关系获取失败")
             return
         }
-        let tags = await RelationShips.findAll({
-            where:{
-                goodsID:goodsID
-            }
-        })
         let content = {}
+        //查询goods
         let goods = await Goods.findByPk(goodsID)
         if (!goods){
             response(res,422,null,"找不到关系")
             return
         }
-        if (!(tags.length>0)){
-            response(res,422,null,"找不到关系")
-            return
-        }
         content.goods = Goodsdto(goods)
+
+        //查询tags关系
+        let tags = await RelationShips.findAll({
+            where:{
+                goodsID:goodsID,
+                status:0
+            }
+        })
+        //导入tags
         tagsContent = []
         for (let i=0;i<tags.length;i++){
             let tag = await Tags.findByPk(tags[i].relationID)
@@ -87,6 +85,23 @@ const controller = {
             }
         }
         content.tags = tagsContent
+
+        //查询tags关系
+        let comments = await RelationShips.findAll({
+            where:{
+                goodsID:goodsID,
+                status:1
+            }
+        })
+        //导入tags
+        commentsContent = []
+        for (let i=0;i<comments.length;i++){
+            let comment = await Comments.findByPk(comments[i].relationID)
+            if (comment){
+                commentsContent.push(comment)
+            }
+        }
+        content.comments = commentsContent
         response(res,200,content,"关系查询成功")
         return
     },

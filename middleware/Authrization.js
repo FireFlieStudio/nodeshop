@@ -27,7 +27,7 @@ module.exports = {
             let user = await User.findByPk(userID)
             if (user){
                 if (user.status==0){
-                    req.body.userid = userID
+                    req.body.userID = userID
                     next()
                 }else{
                     response(res,401,null,"权限不足")

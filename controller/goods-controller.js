@@ -10,7 +10,7 @@ const controller = {
         let image = req.body.image||""
         let desc = req.body.desc||""
         if (!goodsName||!stock||!price){
-            response(res,244,null,"注册商品失败")
+            response(res,422,null,"注册商品失败")
             return
         }
         let goods = {

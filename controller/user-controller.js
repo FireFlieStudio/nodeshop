@@ -10,23 +10,28 @@ const response = require("../response/response")
 const controller = {
     async Regist(req,res){
         let telephone = req.body.telephone||0
+        let image = req.body.image||""
+        let desc = req.body.desc||"这个人很懒,什么都没有写awa..."
         let { userName,password,email } = req.body
         if (!userName||!password||!email){
             if (!userName||!email||!password){
-                response(res,244,null,"注册失败")
+                response(res,422,null,"注册失败")
                 return
             }
         }
         let user = {
-            username:userName,
+            userName:userName,
             password:bcrypt.hashSync(password,10),
             email:email,
-            telephone:telephone
+            telephone:telephone,
+            image:image,
+            desc:desc
         }
         let err = await db.Insert(Users,user)
         if (err!=null){
+            console.log(err)
             if (err =="SequelizeUniqueConstraintError"||err == "SequelizeValidationError"){
-                response(res,422,null,"手机号已被占用")
+                response(res,422,null,"邮箱已被占用")
                 return 
             }
         }
@@ -95,8 +100,8 @@ const controller = {
         response(res,200,dto(user),"修改成功")
     },
     async UpdateUser(req,res){
-        let { usersId,userName,password,telephone,email,image,desc } = req.body
-        let user = await Users.findByPk(usersId)
+        let { usersID,userName,password,telephone,email,image,desc } = req.body
+        let user = await Users.findByPk(usersID)
         if (user){
             if (userName){
                 user.userName = userName

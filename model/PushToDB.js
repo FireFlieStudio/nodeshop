@@ -9,8 +9,11 @@ function DBinitcial(){
     Users.create({
         userName:"Tomato",
         email:"tomato@tomato.com",
-        password:bcrypt.hashSync("passowrd",10)
-    }).then(console.log)
+        password:bcrypt.hashSync("password",10),
+        status:0
+    }).then((res)=>{
+        console.log(res)
+    })
 
     Goods.create({
         goodsName:"薯片",
@@ -39,12 +42,12 @@ function DBinitcial(){
         status:0
     }).then(console.log)
 }
-
+// TABLE()
 DBinitcial()
-module.exports = () => {
-    // Users.sync({force:true})
-    // Goods.sync({force:true})
-    // Tags.sync({force:true})
-    // RelationShips.sync({force:true})
-    // Comments.sync({force:true})
+function TABLE (){
+    Users.sync({force:true})
+    Goods.sync({force:true})
+    Tags.sync({force:true})
+    RelationShips.sync({force:true})
+    Comments.sync({force:true})
 }
