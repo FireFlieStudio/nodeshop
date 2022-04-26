@@ -4,9 +4,9 @@ const response = require("../response/response")
 
 const controller = {
     async Post(req,res){
-        let { userId,desc,star } = req.body
+        let { userID,desc,star } = req.body
         let comments = {
-            userId:userId,
+            userID:userID,
             desc:desc,
             star:star
         }

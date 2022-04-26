@@ -56,12 +56,12 @@ const controller = {
         }
     },
     async Update(req,res){
-        let { tagsId,tagsName,desc } = req.body
-        if (!tagsId){
+        let { tagsID,tagsName,desc } = req.body
+        if (!tagsID){
             response(res,422,null,"分类更改失败")
             return
         }
-        let tags = await Tags.findByPk(tagsId)
+        let tags = await Tags.findByPk(tagsID)
         if (tags){
             if (tagsName){
                 tags.tagsName = tagsName
@@ -76,16 +76,16 @@ const controller = {
         }
     },
     async Delete(req,res){
-        let { tagsId } = req.body
-        if (!tagsId){
+        let { tagsID } = req.body
+        if (!tagsID){
             response(res,422,null,"分类创建失败")
             return
         }
-        let tags = await Tags.findByPk(tagsId)
+        let tags = await Tags.findByPk(tagsID)
         if (tags){
             const destroy = await Tags.destroy({
                 where:{
-                    tagsId:tagsId
+                    tagsID:tagsID
                 }
             })
             response(res,200,dto(tags),"分类删除成功")

@@ -2,7 +2,7 @@ const { Sequelize } = require('sequelize');
 const db = require('../common/database');
 
 const Users = db.defineModel('users', {
-    userId: {
+    userID: {
         type: Sequelize.BIGINT(20),
         primaryKey: true,
         allowNull: false,
@@ -21,7 +21,7 @@ const Users = db.defineModel('users', {
         type: Sequelize.STRING(11),
         allowNull: true,
     },
-    emial: {
+    email: {
         type: Sequelize.STRING(20),
         unique: true,
         allowNull: false

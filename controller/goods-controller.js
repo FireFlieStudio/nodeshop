@@ -37,7 +37,7 @@ const controller = {
     },
     async GetAll(req,res){
         let goods = await Goods.findAll({
-            attributes:["goodsId","goodsName","stock","price","image"],
+            attributes:["goodsID","goodsName","stock","price","image"],
         })
         if (goods){
             response(res,200,{goods:goods},"")
@@ -46,8 +46,8 @@ const controller = {
         response(res,422,null,"暂无商品")
     },
     async Update(req,res){
-        let { goodsId,goodsName,stock,price,image,desc } = req.body
-        let goods = await Goods.findByPk(goodsId)
+        let { goodsID,goodsName,stock,price,image,desc } = req.body
+        let goods = await Goods.findByPk(goodsID)
         if (goods){
             if (goodsName){
                 goods.goodsName = goodsName
@@ -71,12 +71,12 @@ const controller = {
         }
     },
     async Delete(req,res){
-        let { goodsId } = req.body
-        let goods = await Goods.findByPk(goodsId)
+        let { goodsID } = req.body
+        let goods = await Goods.findByPk(goodsID)
         if (goods){
             const destroy = await Goods.destroy({
                 where:{
-                    goodsId:goodsId
+                    goodsID:goodsID
                 }
             })
             response(res,200,dto(goods),"商品删除成功")

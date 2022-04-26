@@ -9,7 +9,7 @@ const Books = db.defineModel('books', {
         unique: true,
         autoIncrement: true
     },
-    userId:{
+    userID:{
         type: Sequelize.BIGINT(20),
         allowNull: false
     },

@@ -2,7 +2,7 @@ const { Sequelize } = require('sequelize');
 const db = require('../common/database')
 
 const Goods = db.defineModel('goods', {
-    goodsId: {
+    goodsID: {
         type: Sequelize.BIGINT(20),
         primaryKey: true,
         allowNull: false,

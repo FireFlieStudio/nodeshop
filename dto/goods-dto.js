@@ -1,6 +1,6 @@
 module.exports = (goods) =>{
     return {
-        goodsId:goods.goodsId,
+        goodsID:goods.goodsID,
         goodsName:goods.goodsName,
         stock:goods.stock,
         price:goods.price,

@@ -2,11 +2,11 @@ const { Sequelize } = require('sequelize');
 const db = require('../common/database')
 
 const RelationShips = db.defineModel('relationships', {
-    goodsId: {
+    goodsID: {
         type: Sequelize.BIGINT(20),
         allowNull: false,
     },
-    relationId: {
+    relationID: {
         type: Sequelize.BIGINT(20),
         allowNull: false,
     },

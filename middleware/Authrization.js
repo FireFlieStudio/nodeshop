@@ -7,10 +7,10 @@ module.exports = {
         try{
             let token = req.headers.authorization.split(' ')[1]
             let decoded = jwt.verify(token,secret)
-            let userId = decoded.userId
-            let user = await User.findByPk(userId)
+            let userID = decoded.userID
+            let user = await User.findByPk(userID)
             if (user){
-                req.body.userId = userId
+                req.body.userID = userID
                 next()
             }else{
                 response(res,401,null,"用户不存在")
@@ -23,11 +23,11 @@ module.exports = {
         try{
             let token = req.headers.authorization.split(' ')[1]
             let decoded = jwt.verify(token,secret)
-            let userId = decoded.userId
-            let user = await User.findByPk(userId)
+            let userID = decoded.userID
+            let user = await User.findByPk(userID)
             if (user){
                 if (user.status==0){
-                    req.body.userid = userId
+                    req.body.userid = userID
                     next()
                 }else{
                     response(res,401,null,"权限不足")

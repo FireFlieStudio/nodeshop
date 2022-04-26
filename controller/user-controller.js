@@ -10,9 +10,9 @@ const response = require("../response/response")
 const controller = {
     async Regist(req,res){
         let telephone = req.body.telephone||0
-        let { userName,password,emial } = req.body
-        if (!userName||!password||!emial){
-            if (!userName||!emial||!password){
+        let { userName,password,email } = req.body
+        if (!userName||!password||!email){
+            if (!userName||!email||!password){
                 response(res,244,null,"注册失败")
                 return
             }
@@ -20,7 +20,7 @@ const controller = {
         let user = {
             username:userName,
             password:bcrypt.hashSync(password,10),
-            emial:emial,
+            email:email,
             telephone:telephone
         }
         let err = await db.Insert(Users,user)
@@ -33,20 +33,20 @@ const controller = {
         response(res,200,{user:dto(user)},"注册成功")
     },
     async Login(req,res){
-        let { emial,password } = req.body
-        if (!emial||!password){
+        let { email,password } = req.body
+        if (!email||!password){
             response(res,422,null,"登陆失败")
             return
         }
         let user = await Users.findOne({
             where:{
-                emial:emial
+                email:email
             }
         })
         if (user){
             if (bcrypt.compareSync(password,user.password)){
-                let userId = user.userId
-                let token = jwt.sign({userId},secret)
+                let userID = user.userID
+                let token = jwt.sign({userID},secret)
                 response(res,200,{token:token},"登录成功")
                 return
             }
@@ -56,13 +56,13 @@ const controller = {
         response(res,401,null,"用户不存在")
     },
     async GetUser(req,res){
-        let userId = req.body.userId
-        let user = await Users.findByPk(userId)
+        let userID = req.body.userID
+        let user = await Users.findByPk(userID)
         response(res,200,{user:dto(user)},"认证成功")
     },
     async GetAll(req,res){
         let users = await Users.findAll({
-            attributes:["userId","userName","telephone","emial","image","desc","status"]
+            attributes:["userID","userName","telephone","email","image","desc","status"]
         })
         if (users){
             response(res,200,users,"")
@@ -71,8 +71,8 @@ const controller = {
         response(res,200,null,"")
     },
     async Update(req,res){
-        let { userId,userName,password,telephone,emial,image,desc } = req.body
-        let user = await Users.findByPk(userId)
+        let { userID,userName,password,telephone,email,image,desc } = req.body
+        let user = await Users.findByPk(userID)
         if (userName){
             user.userName = userName
         }
@@ -82,8 +82,8 @@ const controller = {
         if (telephone){
             user.telephone = telephone
         }
-        if (emial){
-            user.emial = emial
+        if (email){
+            user.email = email
         }
         if (image){
             user.image = image
@@ -95,7 +95,7 @@ const controller = {
         response(res,200,dto(user),"修改成功")
     },
     async UpdateUser(req,res){
-        let { usersId,userName,password,telephone,emial,image,desc } = req.body
+        let { usersId,userName,password,telephone,email,image,desc } = req.body
         let user = await Users.findByPk(usersId)
         if (user){
             if (userName){
@@ -107,8 +107,8 @@ const controller = {
             if (telephone){
                 user.telephone = telephone
             }
-            if (emial){
-                user.emial = emial
+            if (email){
+                user.email = email
             }
             if (image){
                 user.image = image
@@ -123,16 +123,16 @@ const controller = {
         }
     },
     async Delete(req,res){
-        let { userId } = req.body
-        if (!userId){
+        let { userID } = req.body
+        if (!userID){
             response(res,422,null,"用户删除失败")
             return
         }
-        let user = await Users.findByPk(userId)
+        let user = await Users.findByPk(userID)
         if (user){
             const destroy = await Users.destroy({
                 where:{
-                    userId:userId
+                    userID:userID
                 }
             })
             response(res,200,dto(user),"注销成功")
