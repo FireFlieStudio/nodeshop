@@ -6,15 +6,15 @@ const response = require("../response/response")
 
 const controller = {
     async Regist(req,res){
-        let { goodsname,stock,price } = req.body
+        let { goodsName,stock,price } = req.body
         let image = req.body.image||""
         let desc = req.body.desc||""
-        if (!goodsname||!stock||!price){
+        if (!goodsName||!stock||!price){
             response(res,244,null,"注册商品失败")
             return
         }
         let goods = {
-            goodsname:goodsname,
+            goodsName:goodsName,
             stock:stock,
             price:price,
             image:image,
@@ -37,7 +37,7 @@ const controller = {
     },
     async GetAll(req,res){
         let goods = await Goods.findAll({
-            attributes:["goodsid","goodsname","stock","price","image"],
+            attributes:["goodsId","goodsName","stock","price","image"],
         })
         if (goods){
             response(res,200,{goods:goods},"")
@@ -46,11 +46,11 @@ const controller = {
         response(res,422,null,"暂无商品")
     },
     async Update(req,res){
-        let { goodsid,goodsname,stock,price,image,desc } = req.body
-        let goods = await Goods.findByPk(goodsid)
+        let { goodsId,goodsName,stock,price,image,desc } = req.body
+        let goods = await Goods.findByPk(goodsId)
         if (goods){
-            if (goodsname){
-                goods.goodsname = goodsname
+            if (goodsName){
+                goods.goodsName = goodsName
             }
             if (stock){
                 goods.stock = stock
@@ -71,12 +71,12 @@ const controller = {
         }
     },
     async Delete(req,res){
-        let { goodsid } = req.body
-        let goods = await Goods.findByPk(goodsid)
+        let { goodsId } = req.body
+        let goods = await Goods.findByPk(goodsId)
         if (goods){
             const destroy = await Goods.destroy({
                 where:{
-                    goodsid:goodsid
+                    goodsId:goodsId
                 }
             })
             response(res,200,dto(goods),"商品删除成功")

@@ -15,29 +15,29 @@ const response = require("../response/response")
 
 const controller = {
     async TagsRegist(req,res){
-        let { goodsid,tagsid } = req.body
-        if (!goodsid||!tagsid){
+        let { goodsId,tagsId } = req.body
+        if (!goodsId||!tagsId){
             response(res,422,null,"关系注册失败")
             return
         }
         let relationships = {
-            goodsid:goodsid,
-            relationid:tagsid,
+            goodsId:goodsId,
+            relationId:tagsId,
             status:0
         }
         let ret = await RelationShips.findAll({
             where:{
-                goodsid:relationships.goodsid,
-                relationid:relationships.relationid
+                goodsId:relationships.goodsId,
+                relationId:relationships.relationId
             }
         })
         if (ret.length>0){
             response(res,422,null,"关系已被占用")
             return
         }
-        let goods = await Goods.findByPk(relationships.goodsid)
+        let goods = await Goods.findByPk(relationships.goodsId)
         if (goods){
-            let tags = await Tags.findByPk(relationships.relationid)
+            let tags = await Tags.findByPk(relationships.relationId)
             if (tags){
                 let err = await db.Insert(RelationShips,relationships)
                 if (err!=null){
@@ -55,53 +55,21 @@ const controller = {
         response(res,200,null,"关系创建失败,找不到商品")
     },
     async CommentsRegist(req,res){
-        let body = req.body
-        let relationships = {
-            goodsid:body.goodsid,
-            relationid:body.commentsid,
-            status:1
-        }
-        let ret = await RelationShips.findAll({
-            where:{
-                goodsid:relationships.goodsid,
-            }
-        })
-        if (ret.length>0){
-            response(res,200,null,"关系已被占用")
-            return
-        }
-        let goods = await Goods.findByPk(relationships.goodsid)
-        if (goods){
-            let tags = await Tags.findByPk(relationships.relationid)
-            if (tags){
-                let err = await db.Insert(RelationShips,relationships)
-                if (err!=null){
-                    response(res,500,{err:err},"Error")
-                    return 
-                }
-                relationships.tags = Tagsdto(tags)
-                relationships.goods = Goodsdto(goods)
-                response(res,200,{relationships:relationships},"关系创建成功")
-                return
-            }
-            response(res,200,null,"关系创建失败,找不到分类")
-            return
-        }
-        response(res,200,null,"关系创建失败,找不到商品")
+        //未完工
     },
     async GetAll(req,res){
-        let { goodsid } = req.body
-        if (!goodsid){
+        let { goodsId } = req.body
+        if (!goodsId){
             response(res,422,null,"关系获取失败")
             return
         }
         let tags = await RelationShips.findAll({
             where:{
-                goodsid:goodsid
+                goodsId:goodsId
             }
         })
         let content = {}
-        let goods = await Goods.findByPk(goodsid)
+        let goods = await Goods.findByPk(goodsId)
         if (!goods){
             response(res,422,null,"找不到关系")
             return
@@ -111,28 +79,28 @@ const controller = {
             return
         }
         content.goods = Goodsdto(goods)
-        tagscontent = []
+        tagsContent = []
         for (let i=0;i<tags.length;i++){
-            let tag = await Tags.findByPk(tags[i].relationid)
+            let tag = await Tags.findByPk(tags[i].relationId)
             if (tag){
-                tagscontent.push(Tagsdto(tag))
+                tagsContent.push(Tagsdto(tag))
             }
         }
-        content.tags = tagscontent
+        content.tags = tagsContent
         response(res,200,content,"关系查询成功")
         return
     },
     async Delete(req,res){
-        let { goodsid } = req.body
-        if (!goodsid){
+        let { goodsId } = req.body
+        if (!goodsId){
             response(res,422,null,"关系删除失败")
             return
         }
-        let goods = await Goods.findByPk(goodsid)
+        let goods = await Goods.findByPk(goodsId)
         if (goods){
             let destroy = await RelationShips.destroy({
                 where:{
-                    goodsid:goodsid
+                    goodsId:goodsId
                 }
             })
             response(res,200,null,"关系删除成功")

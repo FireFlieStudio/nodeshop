@@ -10,15 +10,15 @@ const response = require("../response/response")
 const controller = {
     async Regist(req,res){
         let telephone = req.body.telephone||0
-        let { username,password,emial } = req.body
-        if (!username||!password||!emial){
-            if (!username||!emial||!password){
+        let { userName,password,emial } = req.body
+        if (!userName||!password||!emial){
+            if (!userName||!emial||!password){
                 response(res,244,null,"注册失败")
                 return
             }
         }
         let user = {
-            username:username,
+            username:userName,
             password:bcrypt.hashSync(password,10),
             emial:emial,
             telephone:telephone
@@ -45,8 +45,8 @@ const controller = {
         })
         if (user){
             if (bcrypt.compareSync(password,user.password)){
-                let userid = user.userid
-                let token = jwt.sign({userid},secret)
+                let userId = user.userId
+                let token = jwt.sign({userId},secret)
                 response(res,200,{token:token},"登录成功")
                 return
             }
@@ -56,13 +56,13 @@ const controller = {
         response(res,401,null,"用户不存在")
     },
     async GetUser(req,res){
-        let { userid } = req.body
-        let user = await Users.findByPk(userid)
+        let userId = req.body.userId
+        let user = await Users.findByPk(userId)
         response(res,200,{user:dto(user)},"认证成功")
     },
     async GetAll(req,res){
         let users = await Users.findAll({
-            attributes:["userid","username","telephone","emial","image","desc","status"]
+            attributes:["userId","userName","telephone","emial","image","desc","status"]
         })
         if (users){
             response(res,200,users,"")
@@ -71,10 +71,10 @@ const controller = {
         response(res,200,null,"")
     },
     async Update(req,res){
-        let { userid,username,password,telephone,emial,image,desc } = req.body
-        let user = await Users.findByPk(userid)
-        if (username){
-            user.username = username
+        let { userId,userName,password,telephone,emial,image,desc } = req.body
+        let user = await Users.findByPk(userId)
+        if (userName){
+            user.userName = userName
         }
         if (password){
             user.password = bcrypt.hashSync(password,10)
@@ -95,11 +95,11 @@ const controller = {
         response(res,200,dto(user),"修改成功")
     },
     async UpdateUser(req,res){
-        let { usersid,username,password,telephone,emial,image,desc } = req.body
-        let user = await Users.findByPk(usersid)
+        let { usersId,userName,password,telephone,emial,image,desc } = req.body
+        let user = await Users.findByPk(usersId)
         if (user){
-            if (username){
-                user.username = username
+            if (userName){
+                user.userName = userName
             }
             if (password){
                 user.password = bcrypt.hashSync(password,10)
@@ -123,16 +123,16 @@ const controller = {
         }
     },
     async Delete(req,res){
-        let { userid } = req.body
-        if (!userid){
+        let { userId } = req.body
+        if (!userId){
             response(res,422,null,"用户删除失败")
             return
         }
-        let user = await Users.findByPk(userid)
+        let user = await Users.findByPk(userId)
         if (user){
             const destroy = await Users.destroy({
                 where:{
-                    userid:userid
+                    userId:userId
                 }
             })
             response(res,200,dto(user),"注销成功")

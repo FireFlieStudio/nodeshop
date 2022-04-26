@@ -4,9 +4,9 @@ const response = require("../response/response")
 
 const controller = {
     async Post(req,res){
-        let { userid,desc,star } = req.body
+        let { userId,desc,star } = req.body
         let comments = {
-            userid:userid,
+            userId:userId,
             desc:desc,
             star:star
         }
@@ -22,12 +22,12 @@ const controller = {
         response(res,200,{comments:comments},"评论发布成功")
     },
     async Delete(req,res){
-        let { commentsid } = req.body
-        let comments = await Comments.findByPk(commentsid)
+        let { commentsId } = req.body
+        let comments = await Comments.findByPk(commentsId)
         if (comments){
             const destroy = await Comments.destroy({
                 where:{
-                    commentsid:commentsid
+                    commentsId:commentsId
                 }
             })
             response(res,200,{comments:comments},"评论删除成功")

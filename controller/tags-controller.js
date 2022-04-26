@@ -6,22 +6,22 @@ const response = require("../response/response")
 
 const controller = {
     async Regist(req,res){
-        let { tagsname,desc } = req.body
-        if (!tagsname||!desc){
+        let { tagsName,desc } = req.body
+        if (!tagsName||!desc){
             response(res,422,null,"分类创建失败")
             return
         }
         let tags = {
-            tagsname:tagsname,
+            tagsName:tagsName,
             desc:desc
         }
         let tag = await Tags.findAll({
             where:{
-                tagsname:tagsname
+                tagsName:tagsName
             }
         })
         if (tag.length>0){
-            response(res,200,null,"分类创建成功")
+            response(res,200,null,"分类已被创建")
             return
         }
         let err = await db.Insert(Tags,tags)
@@ -56,18 +56,18 @@ const controller = {
         }
     },
     async Update(req,res){
-        let tagsid = body.tagsid
-        if (!tagsid){
-            response(res,422,null,"分类创建失败")
+        let { tagsId,tagsName,desc } = req.body
+        if (!tagsId){
+            response(res,422,null,"分类更改失败")
             return
         }
-        let tags = await Tags.findByPk(tagsid)
+        let tags = await Tags.findByPk(tagsId)
         if (tags){
-            if (body.tagsname){
-                tags.tagsname = body.tagsname
+            if (tagsName){
+                tags.tagsName = tagsName
             }
-            if (body.desc){
-                tags.desc = body.desc
+            if (desc){
+                tags.desc = desc
             }
             tags.save()
             response(res,200,dto(tags),"")
@@ -76,16 +76,16 @@ const controller = {
         }
     },
     async Delete(req,res){
-        let tagsid = body.tagsid
-        if (!tagsid){
+        let { tagsId } = req.body
+        if (!tagsId){
             response(res,422,null,"分类创建失败")
             return
         }
-        let tags = await Tags.findByPk(tagsid)
+        let tags = await Tags.findByPk(tagsId)
         if (tags){
             const destroy = await Tags.destroy({
                 where:{
-                    tagsid:tagsid
+                    tagsId:tagsId
                 }
             })
             response(res,200,dto(tags),"分类删除成功")

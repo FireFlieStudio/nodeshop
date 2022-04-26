@@ -1,7 +1,7 @@
 module.exports = (tags) =>{
     return {
-        tagsid:tags.tagsid,
-        tagsname:tags.tagsname,
+        tagsId:tags.tagsId,
+        tagsName:tags.tagsName,
         desc:tags.desc
     }
 }

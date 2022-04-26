@@ -2,14 +2,14 @@ const { Sequelize } = require('sequelize');
 const db = require('../common/database')
 
 const Comments = db.defineModel('comments', {
-    commentsid: {
+    commentsId: {
         type: Sequelize.BIGINT(20),
         primaryKey: true,
         allowNull: false,
         unique: true,
         autoIncrement: true
     },
-    usersid: {
+    usersId: {
         type: Sequelize.BIGINT(20),
         allowNull: false,
     },

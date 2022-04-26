@@ -1,7 +1,7 @@
 module.exports = (user) =>{
         return {
-            userid:user.userid,
-            username:user.username,
+            userId:user.userId,
+            userName:user.userName,
             emial:user.emial,
             image:user.image,
             desc:user.desc

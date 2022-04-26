@@ -1,16 +1,15 @@
 const { Sequelize } = require('sequelize');
 const db = require('../common/database');
-const { root } = require('../middleware/Authrization');
 
 const Users = db.defineModel('users', {
-    userid: {
+    userId: {
         type: Sequelize.BIGINT(20),
         primaryKey: true,
         allowNull: false,
         unique: true,
         autoIncrement: true
     },
-    username: {
+    userName: {
         type: Sequelize.STRING(255),
         allowNull: false
     },

@@ -2,14 +2,14 @@ const { Sequelize } = require('sequelize');
 const db = require('../common/database')
 
 const Goods = db.defineModel('goods', {
-    goodsid: {
+    goodsId: {
         type: Sequelize.BIGINT(20),
         primaryKey: true,
         allowNull: false,
         unique: true,
         autoIncrement: true
     },
-    goodsname: {
+    goodsName: {
         type: Sequelize.STRING(255),
         allowNull: false
     },
