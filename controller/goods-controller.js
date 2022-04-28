@@ -36,11 +36,13 @@ const controller = {
         }
     },
     async GetAll(req,res){
-        let goods = await Goods.findAll({
-            attributes:["goodsID","goodsName","stock","price","image"],
-        })
+        let goods = await Goods.findAll()
         if (goods){
-            response(res,200,{goods:goods},"")
+            goodscontent = []
+            for (let i=0;i<goods.length;i++){
+                goodscontent.push(dto(goods[i]))
+            }
+            response(res,200,{goods:goodscontent},"")
             return
         }
         response(res,422,null,"暂无商品")

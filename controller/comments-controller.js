@@ -14,6 +14,10 @@ const Users = require("../model/Users")
 const controller = {
     async Post(req,res,next){
         let { goodsID,userID,desc,star } = req.body
+        if (!goodsID||!userID||!desc||!star){
+            response(res,422,null,"评论发布失败")
+            return
+        }
         commentstruct = {userID:userID,desc:desc,star:star}
         let comment = await Comments.create(commentstruct)
         let err = await db.Insert(RelationShips,{

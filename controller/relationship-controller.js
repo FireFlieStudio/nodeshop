@@ -6,6 +6,7 @@ const Goodsdto = require("../dto/goods-dto")
 const db = require("../common/database")
 const response = require("../response/response")
 const Comments = require("../model/Comments")
+const Users = require("../model/Users")
 
 /*
     status:
@@ -93,11 +94,17 @@ const controller = {
                 status:1
             }
         })
-        //导入tags
+        //导入comments关系
         commentsContent = []
         for (let i=0;i<comments.length;i++){
             let comment = await Comments.findByPk(comments[i].relationID)
             if (comment){
+                // let image = await Users.findOne({
+                //     where:{
+                //         userID:comment.userID
+                //     }
+                // })||""
+                // comment.image = image.dataValues.image
                 commentsContent.push(comment)
             }
         }

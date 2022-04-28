@@ -66,11 +66,13 @@ const controller = {
         response(res,200,{user:dto(user)},"认证成功")
     },
     async GetAll(req,res){
-        let users = await Users.findAll({
-            attributes:["userID","userName","telephone","email","image","desc","status"]
-        })
+        let users = await Users.findAll()
         if (users){
-            response(res,200,users,"")
+            userscontent = []
+            for (let i=0;i<users.length;i++){
+                userscontent.push(dto(users[i]))
+            }
+            response(res,200,{users:userscontent},"")
             return
         }
         response(res,200,null,"")
