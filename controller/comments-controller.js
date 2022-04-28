@@ -1,5 +1,6 @@
 const Comments = require("../model/Comments")
 const RelationShips = require("../model/RelationShips")
+const dto = require("../dto/comments-dto")
 const db = require("../common/database")
 const response = require("../response/response")
 const Users = require("../model/Users")
@@ -20,16 +21,18 @@ const controller = {
         }
         commentstruct = {userID:userID,desc:desc,star:star}
         let comment = await Comments.create(commentstruct)
-        let err = await db.Insert(RelationShips,{
-            goodsID:goodsID,
-            relationID:comment.dataValues.commentsID,
-            status:1
-        })
-        if (err!=null){
-            response(res,422,null,"评论发布失败")
-            return
+        try{
+            let relation = await RelationShips.create({
+                goodsID:goodsID,
+                relationID:comment.dataValues.commentsID,
+                status:1
+            })
+            commentstruct.commentsID = relation.dataValues.id
+            response(res,200,{comments:commentstruct},"评论发布成功")
+        }catch(err){
+            response(res,200,{err:err},"评论发布失败")
         }
-        response(res,200,{comments:commentstruct},"评论发布成功")
+        
     },
     async Delete(req,res){
         let { commentsID,userID } = req.body

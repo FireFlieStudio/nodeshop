@@ -13,19 +13,19 @@ const controller = {
             response(res,422,null,"注册商品失败")
             return
         }
-        let goods = {
+        let goodstruct = {
             goodsName:goodsName,
             stock:stock,
             price:price,
             image:image,
             desc:desc
         }
-        let err = await db.Insert(Goods,goods)
-        if (err!=null){
+        try{
+            let goods = await Goods.create(goodstruct)
+            response(res,200,{goods:dto(goods.dataValues)},"商品创建成功")
+        }catch(err){
             response(res,500,{err:err},"Error")
-            return 
         }
-        response(res,200,{goods:goods},"商品创建成功")
     },
     async GetGoods(req,res){
         let goods = await Goods.findByPk(req.params.id)

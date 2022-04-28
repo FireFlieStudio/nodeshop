@@ -19,7 +19,7 @@ const controller = {
                 return
             }
         }
-        let user = {
+        let userstruct = {
             userName:userName,
             password:bcrypt.hashSync(password,10),
             email:email,
@@ -27,15 +27,19 @@ const controller = {
             image:image,
             desc:desc
         }
-        let err = await db.Insert(Users,user)
-        if (err!=null){
-            console.log(err)
-            if (err =="SequelizeUniqueConstraintError"||err == "SequelizeValidationError"){
-                response(res,422,null,"邮箱已被占用")
-                return 
+        try{
+            let user = await Users.create(userstruct)
+            response(res,200,{user:dto(user)},"注册成功")
+        }catch(e){
+            let err = e.name
+            if (err!=null){
+                if (err =="SequelizeUniqueConstraintError"||err == "SequelizeValidationError"){
+                    response(res,422,null,"邮箱已被占用")
+                    return 
+                }
             }
         }
-        response(res,200,{user:dto(user)},"注册成功")
+       
     },
     async Login(req,res){
         let { email,password } = req.body

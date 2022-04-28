@@ -11,7 +11,7 @@ const controller = {
             response(res,422,null,"分类创建失败")
             return
         }
-        let tags = {
+        let tagstruct = {
             tagsName:tagsName,
             desc:desc
         }
@@ -24,16 +24,12 @@ const controller = {
             response(res,200,null,"分类已被创建")
             return
         }
-        let err = await db.Insert(Tags,tags)
-        if (err!=null){
-            if (err=="SequelizeUniqueConstraintError"){
-                response(res,200,{tags:dto(tags)},"分类创建成功")
-                return
-            }
-            response(res,500,{err:err},"Error")
-            return 
+        try{
+            let tags = await Tags.create(tagstruct)
+            response(res,200,{tags:dto(tags)},"分类创建成功")
+        }catch(err){
+            response(res,500,{err:err.name},"Error")
         }
-        response(res,200,{tags:dto(tags)},"分类创建成功")
     },
     async Get(req,res){
         let tags = await Tags.findByPk(req.params.id)
